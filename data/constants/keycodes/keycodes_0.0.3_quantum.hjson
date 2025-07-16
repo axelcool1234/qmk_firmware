@@ -13,6 +13,13 @@
             "aliases": [
                 "QK_AREP"
             ]
+        },
+        "0x7C7C": {
+            "group": "quantum",
+            "key": "QK_SKIP_ALT_REPEAT_KEY",
+            "aliases": [
+                "QK_SREP"
+            ]
         }
     }
 }
