@@ -80,4 +80,29 @@ void alt_repeat_key_invoke(const keyevent_t* event);
  */
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods);
 
+/**
+ * @brief Keycode to be used for skip alternate repeating.
+ *
+ * Skip Alternate Repeat performs this keycode based on the second-to-last eligible 
+ * pressed key. The function returns KC_NO if there is no second-to-last key or
+ * if it doesn't have a defined alternate.
+ */
+uint16_t get_skip_alt_repeat_key_keycode(void);
+
+/**
+ * @brief Calls `process_record()` to skip alternate repeat the second-to-last key.
+ * @param event Event information in the generated record.
+ */
+void skip_alt_repeat_key_invoke(const keyevent_t* event);
+
+/**
+ * @brief Optional user callback to define additional skip alternate keys.
+ *
+ * When `get_skip_alt_repeat_key_keycode()` is called, it first calls this callback.
+ * It should return a keycode representing the "skip alternate" of the given keycode
+ * and mods. Returning KC_NO defers to the default definitions in
+ * `get_skip_alt_repeat_key_keycode()`.
+ */
+uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods);
+
 #endif // NO_ALT_REPEAT_KEY

@@ -80,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [PARACETAMAK] = LAYOUT_ergodox(
        // left hand
-       KC_GRV,   KC_7,     KC_8,    KC_9,    KC_0,    KC_5,    KC_TRNS,
+       KC_GRV,   KC_7,     KC_8,    KC_9,    KC_0,    KC_5,    KC_TAB,
        KC_MINUS, KC_J,     KC_U,    KC_O,    KC_P,    KC_Z,    KC_LALT,
        KC_COMM,  QK_AREP, KC_I,    KC_A,    KC_C,    KC_Y,
        KC_DEL,   QK_SREP,  KC_DOT,  KC_QUOTE,KC_W,    KC_V,    KC_LGUI,
@@ -355,15 +355,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM fn_actions[] = {
 };
 
-bool remember_last_key_user(uint16_t keycode, keyrecord_t* record,
-                            uint8_t* remembered_mods) {
-    switch (keycode) {
-        case QK_AREP:
-        case QK_SREP:
-            return false;  // Ignore magic keys.
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // Pure repeat if any modifiers besides shift
+    if ((mods & (MOD_MASK_CTRL | MOD_MASK_ALT | MOD_MASK_GUI))) {
+        return keycode;
     }
 
-    return true;  // Other keys can be repeated.
+    switch (keycode) {
+    case KC_A: return KC_P;
+    case KC_B: return KC_L;
+    case KC_H: return KC_T;
+    case KC_I: return KC_U;
+    case KC_N: return KC_G;
+    case KC_U: return KC_I;
+    default: return keycode;
+    }
+}
+
+uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // Pure repeat if any modifiers besides shift
+    if ((mods & (MOD_MASK_CTRL | MOD_MASK_ALT | MOD_MASK_GUI))) {
+        return keycode;
+    }
+
+    switch (keycode) {
+    case KC_B: return KC_L;
+    case KC_H: return KC_N;
+    case KC_O: return KC_QUOTE;
+    case KC_U: return KC_DOT;
+    default: return keycode;
+    }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)

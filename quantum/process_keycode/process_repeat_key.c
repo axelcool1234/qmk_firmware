@@ -70,6 +70,7 @@ static bool remember_last_key(uint16_t keycode, keyrecord_t* record, uint8_t* re
         case QK_REPEAT_KEY:
 #ifndef NO_ALT_REPEAT_KEY
         case QK_ALT_REPEAT_KEY:
+        case QK_SKIP_ALT_REPEAT_KEY:
 #endif // NO_ALT_REPEAT_KEY
             return false;
     }
@@ -108,6 +109,9 @@ bool process_repeat_key(uint16_t keycode, keyrecord_t* record) {
 #ifndef NO_ALT_REPEAT_KEY
     } else if (keycode == QK_ALT_REPEAT_KEY) {
         alt_repeat_key_invoke(&record->event);
+        return false;
+    } else if (keycode == QK_SKIP_ALT_REPEAT_KEY) {
+        skip_alt_repeat_key_invoke(&record->event);
         return false;
 #endif // NO_ALT_REPEAT_KEY
     }
