@@ -9,7 +9,8 @@
 #define NUMPAD      3
 #define MEDIA_OSX   4
 #define SPECIAL     5
-#define MACRO_OSX   6
+#define P9K_SYM     6
+#define MACRO_OSX   7
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -24,12 +25,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------| LGui |           | RGui |------+------+------+------+------+--------|
  * | LShift |   /  |   V  |   G  |   P  |   B  |      |           |      |   X  |   W  |   .  |   ;  |   -  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | Macro| ^Spc | MTab | Down |  Up  |                                       | Left | Right| MSpc |QWERTY| ^Spc |
+ *   | Macro|  M1  |  M2  | Down |  Up  |                                       | Left | Right| MSpc |QWERTY| ^Spc |
  *   `----------------------------------'                                       `----------------------------------'
  *                                       ,--------------.       ,--------------.
  *                                       | Numpad| Media|       | Media| Numpad|
  *                                ,------|-------|------|       |------+-------+-------.
- *                                |      |       | Slate|       | Slate|       |       |
+ *                                |      |       | P9K  |       |QWERTY|       |       |
  *                                |  E   | Bksp  |------|       |------| Enter | Space |
  *                                |      |       | Speci|       | Speci|       |       |
  *                                `---------------------'       `----------------------'
@@ -53,50 +54,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_RGUI, KC_X, KC_W, KC_DOT,  KC_SCLN, KC_MINS, KC_RSFT,
                        KC_LEFT, KC_RIGHT, LALT(KC_SPC), TG(QWERTY), LCTL(KC_SPC),
         MO(MEDIA_OSX),   MO(NUMPAD),
-        TG(PARACETAMAK),
+        TG(QWERTY),
         MO(SPECIAL), KC_ENT, KC_SPC
     ),
 
 /* Paracetamak
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |  `     |  7   |  8   |  9   |  0   |  5   | Tab  |           | Esc  |  6   |  1   |  2   |  3   |  4   |  \     |
+ * | Esc    |  7   |  8   |  9   |  0   |  5   | CapW |           | CapW |  6   |  1   |  2   |  3   |  4   |  \     |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |  -     |  J   |  U   |  O   |  P   |  Z   | Alt  |           | Alt  |  Q   |  G   |  H   |  L   |  ;   |  =     |
+ * | Tab    |  P   |  G   |  H   |  V   |  Q   | Alt  |           | Alt  |  Z   |  '   |  U   |  O   |  J   |  /     |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |  ,     |Magic |  I   |  A   |  C   |  Y   |------|           |------|  M   |  T   |  N   |  R   |  S   |  /     |
+ * | Bksp   |  Y   |  S   |  N   |  T   |  M   |------|           |------|Magic |  C   |  E   |  A   |  I   |  ,     |
  * |--------+------+------+------+------+------| Cmd  |           | Cmd  |------+------+------+------+------+--------|
- * | LShift |SkpMgc|  .   |  '   |  W   |  V   |      |           |      |  K   |  D   |  B   |  X   |  F   | RShift |
+ * | LShift |  W   |  F   |  B   |  D   |  K   |      |           |      |  X   |SkpMgc|  -   |  ;   |  .   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   | Macro|  M1  |  M2  | Down |  Up  |                                       | Left | Right|  [   |  ]   |  =   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | Ctrl | Num  |       |Media | Ctrl |
  *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |      |
- *                                 |  E   | Bksp |------|       |------|Enter | Spc  |
+ *                                 |      |      | P9K  |       |QWERTY|      |      |
+ *                                 |  R   |  L   |------|       |------|Enter | Spc  |
  *                                 |      |      | Sym  |       | Sym  |      |      |
  *                                 `--------------------'       `--------------------'
  */
 [PARACETAMAK] = LAYOUT_ergodox(
        // left hand
-       KC_GRV,   KC_7,     KC_8,    KC_9,    KC_0,    KC_5,    KC_TAB,
-       KC_MINUS, KC_J,     KC_U,    KC_O,    KC_P,    KC_Z,    KC_LALT,
-       KC_COMM,  QK_AREP, KC_I,    KC_A,    KC_C,    KC_Y,
-       KC_LSFT,   QK_SREP,  KC_DOT,  KC_QUOTE,KC_W,    KC_V,    KC_LGUI,
-       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+       KC_ESC,        KC_7,    KC_8,    KC_9,    KC_0,    KC_5,    CW_TOGG,
+       KC_TAB,        KC_P,    KC_G,    KC_H,    KC_V,    KC_Q,    KC_LALT,
+       KC_BSPC,       KC_Y,    KC_S,    KC_N,    KC_T,    KC_M,
+       KC_LSFT,       KC_W,    KC_F,    KC_B,    KC_D,    KC_K,    KC_LGUI,
+       MO(MACRO_OSX), KC_BTN1, KC_BTN2, KC_DOWN, KC_UP,
                                         KC_LCTL, MO(NUMPAD),
-                                                 KC_TRNS,
-                               KC_E,    KC_BSPC, MO(SPECIAL),
+                                                 TG(PARACETAMAK),
+                                  KC_R, KC_L,    MO(P9K_SYM),
        // right hand
-       KC_ESC,  KC_6,    KC_1,    KC_2,    KC_3,    KC_4,    KC_BSLS,
-       KC_RALT, KC_Q,    KC_G,    KC_H,    KC_L,    KC_SCLN, KC_EQUAL,
-                KC_M,    KC_T,    KC_N,    KC_R,    KC_S,    KC_SLSH,
-       KC_RGUI, KC_K,    KC_D,    KC_B,    KC_X,    KC_F,    KC_RSFT,
-                         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       CW_TOGG,  KC_6,   KC_1,    KC_2,    KC_3,    KC_4,   KC_BSLS,
+       KC_RALT, KC_Z,    KC_QUOT, KC_U,    KC_O,    KC_J,    KC_SLSH,
+                QK_AREP, KC_C,    KC_E,    KC_A,    KC_I,    KC_COMM,
+       KC_RGUI, KC_X,    QK_SREP, KC_MINS, KC_SCLN, KC_DOT,  KC_RSFT,
+                         KC_LEFT, KC_RIGHT,KC_LBRC, KC_RBRC, KC_EQL,
        MO(MEDIA_OSX), KC_RCTL,
-       KC_TRNS,
-       MO(SPECIAL), KC_ENT, KC_SPC
+       TG(QWERTY),
+       MO(P9K_SYM), KC_ENT, KC_SPC
     ),
 
 /* QWERTY
@@ -267,6 +268,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
+/* Paracetamak Symbols
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |   <  |   >  |   {  |   }  |   \  |      |           |      |   ^  |      |   =  |   :  |   +  |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   !  |   @  |   #  |   $  |   %  |------|           |------|      |   &  |   *  |   (  |   )  |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   `  |   ~  |   _  |   "  |   |  |      |           |      |   ?  |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+[P9K_SYM] = LAYOUT_ergodox(
+       // left hand
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_LABK, KC_RABK, KC_LCBR, KC_RCBR, KC_BSLS, KC_TRNS,
+       KC_TRNS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
+       KC_TRNS, KC_GRV,  KC_TILD, KC_UNDS, KC_DQUO, KC_PIPE, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                        KC_TRNS, KC_TRNS,
+                                                 KC_TRNS,
+                               KC_DEL,  KC_TRNS, KC_TRNS,
+       // right hand
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_CIRC, KC_TRNS, KC_EQL,  KC_COLN, KC_PLUS, KC_TRNS,
+                KC_TRNS, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_TRNS,
+       KC_TRNS, KC_QUES, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS,
+       KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS
+    ),
+
 /* Macros for OSX
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -274,7 +317,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        | M <- | M -> | GM<- | GM-> |      |------|           |------|      |      |      |      |      |        |
+ * |        | M <- | M -> | GM<- | GM-> |      |------|           |------|      | BOOT |Restart|     |      |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |        | X <- | X -> | C up | C dn |      |      |           |      |      |      |      |      |      |        |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -301,7 +344,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        // right hand
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                KC_TRNS, QK_BOOT, QK_RBT,  KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
@@ -362,17 +405,14 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     }
 
     // Optimal mappings:
-    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.bigrams | [ .[] | select(.key | startswith("a")) ] | sort_by(.value)'
+    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.bigrams | [ .[] | select(.key | startswith("#")) ] | sort_by(.value)'
     switch (keycode) {
-    case KC_A: return KC_P;
-    case KC_B: return KC_L;
-    case KC_H: return KC_N;
-    case KC_I: return KC_U;
-    case KC_K: return KC_G;
-    case KC_N: return KC_G;
-    case KC_U: return KC_I;
-    case KC_V: return KC_A;
-    case KC_Y: return KC_O;
+    case KC_A: return KC_O;
+    case KC_G: return KC_S;
+    case KC_H: return KC_Y;
+    case KC_J: return KC_I;
+    case KC_U: return KC_E;
+    case KC_Y: return KC_P;
     default: return keycode;
     }
 }
@@ -384,27 +424,29 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     }
 
     // Optimal mappings:
-    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.trigrams | [ .[] | select(.key | startswith("a")) | { skipgram: (.key[0:1] + .key[2:3]), v: .value } ] | group_by(.skipgram) | [ .[] | reduce .[] as $item ( { s: "", v: 0 }; { s: $item.skipgram, v: (.v + $item.v) } ) ] | sort_by(.v)'
+    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.trigrams | [ .[] | select(.key | startswith("#")) | { skipgram: (.key[0:1] + .key[2:3]), v: .value } ] | group_by(.skipgram) | [ .[] | reduce .[] as $item ( { s: "", v: 0 }; { s: $item.skipgram, v: (.v + $item.v) } ) ] | sort_by(.v)'
     switch (keycode) {
     case KC_A: return KC_O;
-    case KC_B: return KC_L;
-    case KC_C: return KC_P;
+    case KC_B: return KC_N;
     case KC_D: return KC_T;
-    case KC_F: return KC_S;
-    case KC_G: return KC_T;
+    case KC_F: return KC_G;
+    case KC_G: return KC_F;
     case KC_H: return KC_N;
+    case KC_J: return KC_I;
     case KC_K: return KC_T;
     case KC_L: return KC_R;
     case KC_M: return KC_T;
-    case KC_O: return KC_QUOTE;
-    case KC_P: return KC_C;
+    case KC_O: return KC_A;
+    case KC_P: return KC_Y;
+    case KC_Q: return KC_E;
     case KC_R: return KC_L;
-    case KC_U: return KC_DOT;
-    case KC_V: return KC_C;
+    case KC_U: return KC_E;
+    case KC_V: return KC_D;
     case KC_W: return KC_Y;
-    case KC_X: return KC_L;
     case KC_Y: return KC_W;
-    case KC_Z: return KC_C;
+    case KC_COMM: return KC_I;
+    case KC_DOT: return KC_I;
+    case KC_SLSH: return KC_I;
     default: return keycode;
     }
 }
