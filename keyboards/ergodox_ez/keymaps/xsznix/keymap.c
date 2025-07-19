@@ -63,11 +63,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |  7   |  8   |  9   |  0   |  5   | CapW |           | CapW |  6   |  1   |  2   |  3   |  4   |  \     |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |  P   |  G   |  H   |  V   |  Q   | Alt  |           | Alt  |  Z   |  '   |  U   |  O   |  J   |  /     |
+ * | Tab    |  W   |  G   |  H   |  V   |  Q   | Alt  |           | Alt  |  Z   |  '   |  U   |  O   |  J   |  /     |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | Bksp   |  Y   |  S   |  N   |  T   |  M   |------|           |------|Magic |  C   |  E   |  A   |  I   |  ,     |
  * |--------+------+------+------+------+------| Cmd  |           | Cmd  |------+------+------+------+------+--------|
- * | LShift |  W   |  F   |  B   |  D   |  K   |      |           |      |  X   |SkpMgc|  -   |  ;   |  .   | RShift |
+ * | LShift |  P   |  F   |  B   |  D   |  K   |      |           |      |  X   |SkpMgc|  -   |  ;   |  .   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   | Macro|  M1  |  M2  | Down |  Up  |                                       | Left | Right|  [   |  ]   |  =   |
  *   `----------------------------------'                                       `----------------------------------'
@@ -82,9 +82,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [PARACETAMAK] = LAYOUT_ergodox(
        // left hand
        KC_ESC,        KC_7,    KC_8,    KC_9,    KC_0,    KC_5,    CW_TOGG,
-       KC_TAB,        KC_P,    KC_G,    KC_H,    KC_V,    KC_Q,    KC_LALT,
+       KC_TAB,        KC_W,    KC_G,    KC_H,    KC_V,    KC_Q,    KC_LALT,
        KC_BSPC,       KC_Y,    KC_S,    KC_N,    KC_T,    KC_M,
-       KC_LSFT,       KC_W,    KC_F,    KC_B,    KC_D,    KC_K,    KC_LGUI,
+       KC_LSFT,       KC_P,    KC_F,    KC_B,    KC_D,    KC_K,    KC_LGUI,
        MO(MACRO_OSX), KC_BTN1, KC_BTN2, KC_DOWN, KC_UP,
                                         KC_LCTL, MO(NUMPAD),
                                                  TG(PARACETAMAK),
@@ -405,11 +405,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     }
 
     // Optimal mappings:
-    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.bigrams | [ .[] | select(.key | startswith("#")) ] | sort_by(.value)'
+    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.bigrams | [ .[] | select(.key | test("[#]{2}")) ] | sort_by(.value)'
     switch (keycode) {
     case KC_A: return KC_O;
     case KC_G: return KC_S;
-    case KC_H: return KC_Y;
+    case KC_H: return KC_N;
     case KC_J: return KC_I;
     case KC_U: return KC_E;
     case KC_Y: return KC_P;
