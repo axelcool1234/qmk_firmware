@@ -14,13 +14,18 @@
 
 #include "repeat_key.h"
 #include "quantum_keycodes.h"
+#include "action_util.h"
 
-// Variables saving the state of the last key press.
-static keyrecord_t last_record = {0};
-static uint8_t     last_mods   = 0;
-// Variables saving the state of the second-to-last key press for skip alt repeat.
-static keyrecord_t second_last_record = {0};
-static uint8_t     second_last_mods   = 0;
+// History entry tracking both user input and generated output
+typedef struct {
+    keyrecord_t user_record;        // What the user actually pressed
+    uint8_t     user_mods;          // Mods when user pressed the key
+    keyrecord_t generated_record;   // What was actually generated/processed
+    uint8_t     generated_mods;     // Mods for the generated key
+} keypress_history_entry_t;
+
+// History buffer: [0] = most recent, [1] = second most recent
+static keypress_history_entry_t keypress_history[2] = {0};
 // Signed count of the number of times the last key has been repeated or
 // alternate repeated: it is 0 when a key is pressed normally, positive when
 // repeated, and negative when alternate repeated.
@@ -30,11 +35,11 @@ static int8_t last_repeat_count = 0;
 static int8_t processing_repeat_count = 0;
 
 uint16_t get_last_keycode(void) {
-    return last_record.keycode;
+    return keypress_history[0].generated_record.keycode;
 }
 
 uint8_t get_last_mods(void) {
-    return last_mods;
+    return keypress_history[0].generated_mods;
 }
 
 void set_last_keycode(uint16_t keycode) {
@@ -47,17 +52,31 @@ void set_last_keycode(uint16_t keycode) {
 }
 
 void set_last_mods(uint8_t mods) {
-    last_mods = mods;
+    keypress_history[0].generated_mods = mods;
+}
+
+keyrecord_t* get_last_record(void) {
+    return &keypress_history[0].generated_record;
 }
 
 void set_last_record(uint16_t keycode, keyrecord_t* record) {
-    // Save the current last key as the second-to-last
-    second_last_record = last_record;
-    second_last_mods   = last_mods;
+    // Shift history: current becomes previous
+    keypress_history[1] = keypress_history[0];
     
-    last_record         = *record;
-    last_record.keycode = keycode;
-    last_repeat_count   = 0;
+    // Set new entry (for normal keys, user and generated are the same)
+    keypress_history[0].user_record = *record;
+    keypress_history[0].user_record.keycode = keycode;
+    keypress_history[0].generated_record = *record;
+    keypress_history[0].generated_record.keycode = keycode;
+    
+    uint8_t mods = get_mods() | get_weak_mods();
+#ifndef NO_ACTION_ONESHOT
+    mods |= get_oneshot_mods();
+#endif
+    keypress_history[0].user_mods = mods;
+    keypress_history[0].generated_mods = mods;
+    
+    last_repeat_count = 0;
 }
 
 /** @brief Updates `last_repeat_count` in direction `dir`. */
@@ -83,15 +102,15 @@ void repeat_key_invoke(const keyevent_t* event) {
     // Since this function calls process_record(), it may recursively call
     // itself. We return early if `processing_repeat_count` is nonzero to
     // prevent infinite recursion.
-    if (processing_repeat_count || !last_record.keycode) {
+    if (processing_repeat_count || !keypress_history[0].generated_record.keycode) {
         return;
     }
 
     if (event->pressed) {
         update_last_repeat_count(1);
         // On press, apply the last mods state, stacking on top of current mods.
-        register_weak_mods(last_mods);
-        registered_record       = last_record;
+        register_weak_mods(keypress_history[0].generated_mods);
+        registered_record       = keypress_history[0].generated_record;
         registered_repeat_count = last_repeat_count;
     }
 
@@ -103,7 +122,7 @@ void repeat_key_invoke(const keyevent_t* event) {
 
     // On release, restore the mods state.
     if (!event->pressed) {
-        unregister_weak_mods(last_mods);
+        unregister_weak_mods(keypress_history[0].generated_mods);
     }
 }
 
@@ -133,8 +152,8 @@ static uint8_t find_alt_keycode(const uint8_t (*table)[2], uint8_t table_size_by
 }
 
 uint16_t get_alt_repeat_key_keycode(void) {
-    uint16_t keycode = last_record.keycode;
-    uint8_t  mods    = last_mods;
+    uint16_t keycode = keypress_history[0].generated_record.keycode;
+    uint8_t  mods    = keypress_history[0].generated_mods;
 
     // Call the user callback first to give it a chance to override the default
     // alternate key definitions that follow.
@@ -289,8 +308,8 @@ __attribute__((weak)) uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode,
 }
 
 uint16_t get_skip_alt_repeat_key_keycode(void) {
-    uint16_t keycode = second_last_record.keycode;
-    uint8_t  mods    = second_last_mods;
+    uint16_t keycode = keypress_history[1].generated_record.keycode;
+    uint8_t  mods    = keypress_history[1].generated_mods;
 
     // Call the user callback first to give it a chance to override the default
     // alternate key definitions that follow.
