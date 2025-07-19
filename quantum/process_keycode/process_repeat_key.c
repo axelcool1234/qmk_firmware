@@ -79,17 +79,18 @@ static bool remember_last_key(uint16_t keycode, keyrecord_t* record, uint8_t* re
 }
 
 bool process_last_key(uint16_t keycode, keyrecord_t* record) {
-    if (get_repeat_key_count()) {
-        return true;
-    }
-
     if (record->event.pressed) {
         uint8_t remembered_mods = get_mods() | get_weak_mods();
 #ifndef NO_ACTION_ONESHOT
         remembered_mods |= get_oneshot_mods();
 #endif // NO_ACTION_ONESHOT
 
-        if (remember_last_key(keycode, record, &remembered_mods)) {
+        if (get_repeat_key_count() != 0) {
+            // We're processing generated output from repeat - always record
+            set_last_record(keycode, record);
+            set_last_mods(remembered_mods);
+        } else if (remember_last_key(keycode, record, &remembered_mods)) {
+            // Normal processing with exclusions
             set_last_record(keycode, record);
             set_last_mods(remembered_mods);
         }

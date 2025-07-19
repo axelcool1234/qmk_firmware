@@ -62,7 +62,7 @@ void repeat_key_invoke(const keyevent_t* event);
  * key was KC_UP, this function returns KC_DOWN. The function returns KC_NO if
  * the last key doesn't have a defined alternate.
  */
-uint16_t get_alt_repeat_key_keycode(void);
+uint16_t get_alt_repeat_key_keycode(bool allow_recursion);
 
 /**
  * @brief Calls `process_record()` to alternate repeat the last key.
@@ -87,7 +87,7 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods);
  * pressed key. The function returns KC_NO if there is no second-to-last key or
  * if it doesn't have a defined alternate.
  */
-uint16_t get_skip_alt_repeat_key_keycode(void);
+uint16_t get_skip_alt_repeat_key_keycode(bool allow_recursion);
 
 /**
  * @brief Calls `process_record()` to skip alternate repeat the second-to-last key.

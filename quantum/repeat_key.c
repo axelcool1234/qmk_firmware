@@ -33,6 +33,8 @@ static int8_t last_repeat_count = 0;
 // The repeat_count, but set to 0 outside of repeat_key_invoke() so that it is
 // nonzero only while a repeated key is being processed.
 static int8_t processing_repeat_count = 0;
+// The keycode of the repeat key currently being processed (KC_NO when not processing)
+static uint16_t processing_repeat_keycode = KC_NO;
 
 uint16_t get_last_keycode(void) {
     return keypress_history[0].generated_record.keycode;
@@ -63,18 +65,28 @@ void set_last_record(uint16_t keycode, keyrecord_t* record) {
     // Shift history: current becomes previous
     keypress_history[1] = keypress_history[0];
     
-    // Set new entry (for normal keys, user and generated are the same)
-    keypress_history[0].user_record = *record;
-    keypress_history[0].user_record.keycode = keycode;
-    keypress_history[0].generated_record = *record;
-    keypress_history[0].generated_record.keycode = keycode;
-    
     uint8_t mods = get_mods() | get_weak_mods();
 #ifndef NO_ACTION_ONESHOT
     mods |= get_oneshot_mods();
 #endif
-    keypress_history[0].user_mods = mods;
-    keypress_history[0].generated_mods = mods;
+
+    if (processing_repeat_count != KC_NO) {
+        // We're processing a generated key from a repeat operation
+        keypress_history[0].user_record = *record;
+        keypress_history[0].user_record.keycode = processing_repeat_keycode;
+        keypress_history[0].generated_record = *record;
+        keypress_history[0].generated_record.keycode = keycode;
+        keypress_history[0].user_mods = mods;
+        keypress_history[0].generated_mods = mods;
+    } else {
+        // Normal key: user and generated are the same
+        keypress_history[0].user_record = *record;
+        keypress_history[0].user_record.keycode = keycode;
+        keypress_history[0].generated_record = *record;
+        keypress_history[0].generated_record.keycode = keycode;
+        keypress_history[0].user_mods = mods;
+        keypress_history[0].generated_mods = mods;
+    }
     
     last_repeat_count = 0;
 }
@@ -116,9 +128,11 @@ void repeat_key_invoke(const keyevent_t* event) {
 
     // Generate a keyrecord and plumb it into the event pipeline.
     registered_record.event = *event;
+    processing_repeat_keycode = QK_REPEAT_KEY;
     processing_repeat_count = registered_repeat_count;
     process_record(&registered_record);
     processing_repeat_count = 0;
+    processing_repeat_keycode = KC_NO;
 
     // On release, restore the mods state.
     if (!event->pressed) {
@@ -151,15 +165,23 @@ static uint8_t find_alt_keycode(const uint8_t (*table)[2], uint8_t table_size_by
     return KC_NO;
 }
 
-uint16_t get_alt_repeat_key_keycode(void) {
-    uint16_t keycode = keypress_history[0].generated_record.keycode;
-    uint8_t  mods    = keypress_history[0].generated_mods;
+uint16_t get_alt_repeat_key_keycode(bool allow_recursion) {
+    uint16_t keycode = keypress_history[0].user_record.keycode;
+    uint8_t  mods    = keypress_history[0].user_mods;
 
     // Call the user callback first to give it a chance to override the default
     // alternate key definitions that follow.
     uint16_t alt_keycode = get_alt_repeat_key_keycode_user(keycode, mods);
 
     if (alt_keycode != KC_TRANSPARENT) {
+        // If user returned a repeat keycode and recursion is allowed, re-execute that operation
+        if (allow_recursion && alt_keycode == QK_SKIP_ALT_REPEAT_KEY) {
+            return get_skip_alt_repeat_key_keycode(false);
+        }
+        if (allow_recursion && alt_keycode == QK_ALT_REPEAT_KEY) {
+            // Re-execute alt repeat with the generated keycode from the target
+            return get_alt_repeat_key_keycode_user(keypress_history[0].generated_record.keycode, keypress_history[0].generated_mods);
+        }
         return alt_keycode;
     }
 
@@ -281,7 +303,7 @@ void alt_repeat_key_invoke(const keyevent_t* event) {
             .tap.interrupted = false,
             .tap.count       = 0,
 #    endif
-            .keycode = get_alt_repeat_key_keycode(),
+            .keycode = get_alt_repeat_key_keycode(true),
         };
     }
 
@@ -297,9 +319,11 @@ void alt_repeat_key_invoke(const keyevent_t* event) {
 
     // Generate a keyrecord and plumb it into the event pipeline.
     registered_record.event = *event;
+    processing_repeat_keycode = QK_ALT_REPEAT_KEY;
     processing_repeat_count = registered_repeat_count;
     process_record(&registered_record);
     processing_repeat_count = 0;
+    processing_repeat_keycode = KC_NO;
 }
 
 // Default implementation of get_alt_repeat_key_keycode_user().
@@ -307,15 +331,23 @@ __attribute__((weak)) uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode,
     return KC_TRANSPARENT;
 }
 
-uint16_t get_skip_alt_repeat_key_keycode(void) {
-    uint16_t keycode = keypress_history[1].generated_record.keycode;
-    uint8_t  mods    = keypress_history[1].generated_mods;
+uint16_t get_skip_alt_repeat_key_keycode(bool allow_recursion) {
+    uint16_t keycode = keypress_history[1].user_record.keycode;
+    uint8_t  mods    = keypress_history[1].user_mods;
 
     // Call the user callback first to give it a chance to override the default
     // alternate key definitions that follow.
     uint16_t alt_keycode = get_skip_alt_repeat_key_keycode_user(keycode, mods);
 
     if (alt_keycode != KC_TRANSPARENT) {
+        // If user returned a repeat keycode and recursion is allowed, re-execute that operation
+        if (allow_recursion && alt_keycode == QK_ALT_REPEAT_KEY) {
+            return get_alt_repeat_key_keycode(false);
+        }
+        if (allow_recursion && alt_keycode == QK_SKIP_ALT_REPEAT_KEY) {
+            // Re-execute skip alt repeat with the generated keycode from the target
+            return get_skip_alt_repeat_key_keycode_user(keypress_history[1].generated_record.keycode, keypress_history[1].generated_mods);
+        }
         return alt_keycode;
     }
 
@@ -438,7 +470,7 @@ void skip_alt_repeat_key_invoke(const keyevent_t* event) {
             .tap.interrupted = false,
             .tap.count       = 0,
 #    endif
-            .keycode = get_skip_alt_repeat_key_keycode(),
+            .keycode = get_skip_alt_repeat_key_keycode(true),
         };
     }
 
@@ -454,9 +486,11 @@ void skip_alt_repeat_key_invoke(const keyevent_t* event) {
 
     // Generate a keyrecord and plumb it into the event pipeline.
     registered_record.event = *event;
+    processing_repeat_keycode = QK_SKIP_ALT_REPEAT_KEY;
     processing_repeat_count = registered_repeat_count;
     process_record(&registered_record);
     processing_repeat_count = 0;
+    processing_repeat_keycode = KC_NO;
 }
 
 // Default implementation of get_skip_alt_repeat_key_keycode_user().
