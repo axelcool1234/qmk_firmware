@@ -63,11 +63,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |  7   |  8   |  9   |  0   |  5   |M-Bksp|           |M-Del |  6   |  1   |  2   |  3   |  4   |  \     |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |  W   |  G   |  H   |  V   |  K   | Alt  |           | Alt  |  Z   |  '   |  U   |  O   |  J   |  /     |
+ * | Tab    |  Z   |  B   |  G   |  V   |  K   | Alt  |           | Alt  |  '   |  W   |  O   |  U   |  J   |  /     |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Bksp   |  Y   |  S   |  N   |  T   |  M   |------|           |------|Magic |SkpMgc|  E   |  A   |  I   |  ,     |
+ * | Bksp   |  H   |  N   |  S   |  T   |  M   |------|           |------|Magic |SkpMgc|  A   |  E   |  I   |  ,     |
  * |--------+------+------+------+------+------| Cmd  |           | Cmd  |------+------+------+------+------+--------|
- * | LShift |  P   |  F   |  B   |  D   |  Q   |      |           |      |  X   |  C   |  -   |  ;   |  .   | RShift |
+ * | LShift |  Y   |  P   |  F   |  D   |  Q   |      |           |      |  X   |  C   |  -   |  ;   |  .   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   | Macro|  M1  |  M2  | Down |  Up  |                                       | Left | Right|  [   |  ]   |  =   |
  *   `----------------------------------'                                       `----------------------------------'
@@ -82,17 +82,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [PARACETAMAK] = LAYOUT_ergodox(
        // left hand
        KC_ESC,        KC_7,    KC_8,    KC_9,    KC_0,    KC_5,    LALT(KC_BSPC),
-       KC_TAB,        KC_W,    KC_G,    KC_H,    KC_V,    KC_K,    KC_LALT,
-       KC_BSPC,       KC_Y,    KC_S,    KC_N,    KC_T,    KC_M,
-       KC_LSFT,       KC_P,    KC_F,    KC_B,    KC_D,    KC_Q,    KC_LGUI,
+       KC_TAB,        KC_Z,    KC_B,    KC_G,    KC_V,    KC_K,    KC_LALT,
+       KC_BSPC,       KC_H,    KC_N,    KC_S,    KC_T,    KC_M,
+       KC_LSFT,       KC_Y,    KC_P,    KC_F,    KC_D,    KC_Q,    KC_LGUI,
        MO(MACRO_OSX), KC_BTN1, KC_BTN2, KC_DOWN, KC_UP,
                                         KC_LCTL, MO(NUMPAD),
                                                  TG(PARACETAMAK),
                                   KC_R, KC_L,    MO(P9K_SYM),
        // right hand
   LALT(KC_DEL), KC_6,    KC_1,    KC_2,    KC_3,    KC_4,   KC_BSLS,
-       KC_RALT, KC_Z,    KC_QUOT, KC_U,    KC_O,    KC_J,    KC_SLSH,
-                QK_AREP, QK_SREP, KC_E,    KC_A,    KC_I,    KC_COMM,
+       KC_RALT, KC_QUOT, KC_W,    KC_O,    KC_U,    KC_J,    KC_SLSH,
+                QK_AREP, QK_SREP, KC_A,    KC_E,    KC_I,    KC_COMM,
        KC_RGUI, KC_X,    KC_C,    KC_MINS, KC_SCLN, KC_DOT,  KC_RSFT,
                          KC_LEFT, KC_RIGHT,KC_LBRC, KC_RBRC, KC_EQL,
        MO(MEDIA_OSX), KC_RCTL,
@@ -273,7 +273,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |        |   <  |   >  |   {  |   }  |   \  |      |           |      |   ?  |      |   =  |   :  |   +  |        |
+ * |        |   <  |   >  |   {  |   }  |   \  |      |           |      |      |   ?  |   =  |   :  |   +  |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |        |   !  |   @  |   #  |   $  |   %  |------|           |------|      |      |   *  |   (  |   )  |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -301,7 +301,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                KC_DEL,  KC_BSPC, KC_TRNS,
        // right hand
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_QUES, KC_TRNS, KC_EQL,  KC_COLN, KC_PLUS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_QUES, KC_EQL,  KC_COLN, KC_PLUS, KC_TRNS,
                 KC_TRNS, KC_TRNS, KC_ASTR, KC_LPRN, KC_RPRN, KC_TRNS,
        KC_TRNS, KC_CIRC, KC_AMPR, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -409,10 +409,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
     case KC_A: return KC_O;
     case KC_G: return KC_S;
-    case KC_H: return KC_N;
+    case KC_H: return KC_Y;
     case KC_J: return KC_I;
     case KC_U: return KC_E;
-    case KC_Y: return KC_P;
+    case KC_Y: return KC_H;
+    case KC_Z: return KC_Y;
     default: return keycode;
     }
 }
@@ -429,21 +430,20 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     case KC_A: return KC_O;
     case KC_B: return KC_N;
     case KC_D: return KC_T;
-    case KC_F: return KC_G;
+    case KC_F: return KC_S;
     case KC_G: return KC_F;
-    case KC_H: return KC_N;
+    case KC_H: return KC_Y;
     case KC_J: return KC_I;
     case KC_K: return KC_T;
     case KC_L: return KC_R;
     case KC_M: return KC_T;
     case KC_O: return KC_A;
-    case KC_P: return KC_Y;
+    case KC_P: return KC_N;
     case KC_Q: return KC_E;
     case KC_R: return KC_L;
     case KC_U: return KC_E;
     case KC_V: return KC_D;
-    case KC_W: return KC_Y;
-    case KC_Y: return KC_W;
+    case KC_Y: return KC_H;
     case KC_COMM: return KC_I;
     case KC_DOT: return KC_I;
     case KC_SLSH: return KC_I;
