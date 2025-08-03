@@ -434,15 +434,15 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     case KC_G: return KC_F;
     case KC_H: return KC_Y;
     case KC_J: return KC_I;
-    case KC_K: return KC_T;
+    case KC_K: return KC_D;
     case KC_L: return KC_R;
-    case KC_M: return KC_T;
+    case KC_M: return KC_V;
     case KC_O: return KC_A;
     case KC_P: return KC_N;
     case KC_Q: return KC_E;
     case KC_R: return KC_L;
     case KC_U: return KC_E;
-    case KC_V: return KC_D;
+    case KC_V: return KC_T;
     case KC_Y: return KC_H;
     case KC_COMM: return KC_I;
     case KC_DOT: return KC_I;
