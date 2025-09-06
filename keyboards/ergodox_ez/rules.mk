@@ -9,7 +9,8 @@ CUSTOM_MATRIX    = lite # Custom matrix file for the ErgoDox EZ
 SRC += matrix.c
 I2C_DRIVER_REQUIRED = yes
 
-# repeat key
+# xsznix overrides
+CAPS_WORD_ENABLE = yes
 REPEAT_KEY_ENABLE = yes
 
 # Disable unsupported hardware
