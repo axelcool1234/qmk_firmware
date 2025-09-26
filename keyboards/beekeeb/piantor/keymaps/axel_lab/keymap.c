@@ -42,12 +42,14 @@ enum keycodes {
  * TD means Tapdance
  * */
 #define OS_SYM OSL(_SYM)
+#define OS_NUM OSL(_NUM)
 
 ///--- Combos ---///
 /// Defines custom combos (pressing a combination of keys produces a unique output)
 /// Macro API: COMBO_DEF(combo name, output, ...keys to press simultaneously)
 #define COMBO_LIST \
-    COMBO_DEF(ENTER_COMBO, KC_ENTER, OS_LSFT, OS_SYM)
+    COMBO_DEF(ENTER_COMBO, KC_ENTER,    KC_SPACE, QK_REP) \
+    COMBO_DEF(NUM_COMBO,   OS_NUM,      OS_LSFT,  OS_SYM)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
@@ -133,7 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Macro magic junk
 enum combo_events {
 #define COMBO_DEF(name, output, ...) name,
-    ENTER_COMBO,
+    COMBO_LIST
 #undef COMBO_DEF
 };
 #define COMBO_DEF(name, output, ...) const uint16_t PROGMEM name##_combo[] = { __VA_ARGS__, COMBO_END };
