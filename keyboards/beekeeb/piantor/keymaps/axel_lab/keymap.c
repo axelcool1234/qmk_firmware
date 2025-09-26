@@ -54,7 +54,7 @@ enum keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
     [_BASE] = LAYOUT_split_3x6_3(
-    //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+    //|-----------------------------------------------------|                    |-----------------------------------------------------|
        XXXXXXXX,  KC_F,    KC_R,    KC_D,    KC_P,    KC_V,      /*-------*/        KC_Q,    KC_L,    KC_U,    KC_O,    KC_Y,  XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------|     |RECURVA|      |--------+--------+--------+--------+--------+--------|
        XXXXXXXX,  KC_S,    KC_N,    KC_T,    KC_C,    KC_B,      /*-------*/        KC_M,    KC_H,    KC_E,    KC_A,    KC_I,  XXXXXXXX,
@@ -62,7 +62,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        XXXXXXXX,  KC_Z,    KC_X,    KC_K,    KC_G,    KC_W,                         KC_J,   KC_DOT,  KC_SCLN,KC_QUOTE,KC_COMMA,XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                             KC_BSPC,KC_SPACE,OS_LSFT,     OS_SYM,  QK_REP, XXXXXXXX
-                                        //`--------------------------'  `--------------------------'
+    //                                    |--------------------------|  |--------------------------|
+    //                                         |        |      |            |         |        |
+    //                                         |        |      .-- OS_NUM --.         |        |
+    //                                         |        .--------- KC_ENTER ----------.        |
+    //                                         .------------------ XXXXXXXX -------------------.
     ),
     [_SYM] = LAYOUT_split_3x6_3( // Mirrored version of Pascal Getreuer's symbol layer, with the opening and closing braces flipped for inward rolls.
                                  // Additionally, having it flipped means KC_MINS/KC_SLSH can be swapped with KC_PLUS/KC_ASTR, since those are more
