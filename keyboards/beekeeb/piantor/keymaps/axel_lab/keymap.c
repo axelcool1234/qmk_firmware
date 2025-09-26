@@ -10,9 +10,9 @@
 
 ///--- Layers ---///
 /// The following defines the layers of the keyboard in order. Used in `keymaps`.
-/// BUNYA:       Base layer. Uses Bunya alt keyboard layout. https://layouts.wiki/layouts/2023/bunya/
+/// BASE:       Base layer. Uses Recurva-colstag2 alt keyboard layout. https://layouts.wiki/layouts/2023/recurva/
 enum layers {
-    _BUNYA,
+    _BASE,
 };
 
 ///--- Alias Macros ---////
@@ -22,15 +22,15 @@ enum layers {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
-    [_BUNYA] = LAYOUT_split_3x6_3(
+    [_BASE] = LAYOUT_split_3x6_3(
     //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       XXXXXXXX,  KC_B,    KC_L,    KC_M,    KC_C,    KC_Z,      /*-------*/        KC_X,    KC_F,    KC_O,    KC_U,  KC_COMMA,XXXXXXXX,
-    //|--------+--------+--------+--------+--------+--------|     | BUNYA |      |--------+--------+--------+--------+--------+--------|
-       XXXXXXXX,  KC_N,    KC_R,    KC_T,    KC_D,    KC_P,      /*-------*/        KC_Y,    KC_H,    KC_A,    KC_E,    KC_I,  KC_MINUS,
+       XXXXXXXX,  KC_F,    KC_R,    KC_D,    KC_P,    KC_V,      /*-------*/        KC_Q,    KC_L,    KC_U,    KC_O,    KC_Y,  XXXXXXXX,
+    //|--------+--------+--------+--------+--------+--------|     |RECURVA|      |--------+--------+--------+--------+--------+--------|
+       XXXXXXXX,  KC_S,    KC_N,    KC_T,    KC_C,    KC_B,      /*-------*/        KC_M,    KC_H,    KC_E,    KC_A,    KC_I,  XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       XXXXXXXX, KC_SCLN,  KC_J,    KC_Q,    KC_G,    KC_W,                         KC_K,    KC_V,  KC_QUOTE,KC_SLASH, KC_DOT, XXXXXXXX,
+       XXXXXXXX,  KC_Z,    KC_X,    KC_K,    KC_G,    KC_W,                         KC_J,   KC_DOT,  KC_SCLN,KC_QUOTE,KC_COMMA,XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           XXXXXXXX,  KC_S,  XXXXXXXX,   XXXXXXXX,XXXXXXXX,XXXXXXXX
+                                           XXXXXXXX,KC_SPACE,XXXXXXXX,   XXXXXXXX,XXXXXXXX,XXXXXXXX
                                         //`--------------------------'  `--------------------------'
     ),
 };
