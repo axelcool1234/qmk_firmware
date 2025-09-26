@@ -30,7 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        XXXXXXXX,  KC_Z,    KC_X,    KC_K,    KC_G,    KC_W,                         KC_J,   KC_DOT,  KC_SCLN,KC_QUOTE,KC_COMMA,XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           XXXXXXXX,KC_SPACE,XXXXXXXX,   XXXXXXXX,XXXXXXXX,XXXXXXXX
+                                           XXXXXXXX,KC_SPACE,XXXXXXXX,   XXXXXXXX, QK_REP, XXXXXXXX
                                         //`--------------------------'  `--------------------------'
     ),
 };
