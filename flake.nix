@@ -22,7 +22,7 @@
         compile = pkgs.writeShellScriptBin "compile" ''
           #!/usr/bin/env bash
           set -euo pipefail
-          qmk compile -kb beekeeb/piantor -km "$@"
+          bear -- qmk compile -kb beekeeb/piantor -km "$@"
         '';
       in
       with pkgs;
@@ -32,6 +32,9 @@
             qmk
             keymapviz
             vial
+
+            clang-tools # LSP
+            bear # For configuring LSP (https://dema.dev/blog/lsp-for-qmk/)
 
             compile
           ];
