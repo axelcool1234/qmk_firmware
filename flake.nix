@@ -19,6 +19,11 @@
         pkgs = import nixpkgs {
           inherit system;
         };
+        compile = pkgs.writeShellScriptBin "compile" ''
+          #!/usr/bin/env bash
+          set -euo pipefail
+          qmk compile -kb beekeeb/piantor -km "$@"
+        '';
       in
       with pkgs;
       {
@@ -27,6 +32,8 @@
             qmk
             keymapviz
             vial
+
+            compile
           ];
         };
       }
