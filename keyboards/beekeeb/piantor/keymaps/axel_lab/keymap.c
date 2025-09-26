@@ -12,9 +12,11 @@
 /// The following defines the layers of the keyboard in order. Used in `keymaps`.
 /// BASE: Base layer. Uses Recurva-colstag2 alt keyboard layout. https://layouts.wiki/layouts/2023/recurva/
 /// SYM:  Symbol layer. Mirrored version of Pascal Getreuer's symbol layer.
+/// NUM:  Number layer. Numbers are on homerow, assigned to fingers based off how common it is.
 enum layers {
     _BASE,
     _SYM,
+    _NUM,
 };
 
 ///--- Keycodes ---///
@@ -39,7 +41,7 @@ enum keycodes {
  * OSL means Oneshot-Layer
  * TD means Tapdance
  * */
-#define OSL_SYM OSL(_SYM)
+#define OS_SYM OSL(_SYM)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
@@ -51,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        XXXXXXXX,  KC_Z,    KC_X,    KC_K,    KC_G,    KC_W,                         KC_J,   KC_DOT,  KC_SCLN,KC_QUOTE,KC_COMMA,XXXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           XXXXXXXX,KC_SPACE,OS_LSFT,     OSL_SYM, QK_REP, XXXXXXXX
+                                            KC_BSPC,KC_SPACE,OS_LSFT,     OS_SYM,  QK_REP, XXXXXXXX
                                         //`--------------------------'  `--------------------------'
     ),
     [_SYM] = LAYOUT_split_3x6_3( // Mirrored version of Pascal Getreuer's symbol layer, with the opening and closing braces flipped for inward rolls.
@@ -86,8 +88,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                            ________,________,QK_LLCK,    ________,KC_UNDS, KC_SCLN
                                         //`--------------------------'  `--------------------------' <
     ),
+    [_NUM] = LAYOUT_split_3x6_3(
+    //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       ________, KC_PERC, KC_PLUS, KC_MINS, KC_EQL,  KC_COMM,                       KC_DOT, KC_AMPR,  KC_LT,   KC_GT, KC_PIPE, ________,
+    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       ________,  KC_9,   KC_5,    KC_1,    KC_3,    KC_7,                          KC_6,    KC_2,    KC_0,    KC_4,    KC_8,  ________,
+    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       ________,OS_LGUI, OS_LALT, OS_LSFT, OS_LCTL,  KC_EQL,                       KC_MINS, KC_PLUS, KC_SLSH, KC_ASTR, KC_CIRC,________,
+    //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                           ________,________,________,   KC_COMM,  KC_BSPC, KC_DOT
+                                        //`--------------------------'  `--------------------------'
+    ),
 };
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
