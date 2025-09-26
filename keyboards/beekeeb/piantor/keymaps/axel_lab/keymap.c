@@ -43,6 +43,12 @@ enum keycodes {
  * */
 #define OS_SYM OSL(_SYM)
 
+///--- Combos ---///
+/// Defines custom combos (pressing a combination of keys produces a unique output)
+/// Macro API: COMBO_DEF(combo name, output, ...keys to press simultaneously)
+#define COMBO_LIST \
+    COMBO_DEF(ENTER_COMBO, KC_ENTER, OS_LSFT, OS_SYM)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
     [_BASE] = LAYOUT_split_3x6_3(
@@ -123,3 +129,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+// Macro magic junk
+enum combo_events {
+#define COMBO_DEF(name, output, ...) name,
+    ENTER_COMBO,
+#undef COMBO_DEF
+};
+#define COMBO_DEF(name, output, ...) const uint16_t PROGMEM name##_combo[] = { __VA_ARGS__, COMBO_END };
+    COMBO_LIST
+#undef COMBO_DEF
+
+combo_t key_combos[] = {
+#define COMBO_DEF(name, output, ...) [name] = COMBO(name##_combo, output),
+    COMBO_LIST
+#undef COMBO_DEF
+};
