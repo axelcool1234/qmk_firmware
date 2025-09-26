@@ -35,6 +35,9 @@
 
             compile
           ];
+          shellHook = ''
+            cd keyboards/beekeeb/piantor/keymaps
+          '';
         };
       }
     );
