@@ -31,7 +31,6 @@
           packages = [
             qmk
             keymapviz
-            vial
 
             clang-tools # LSP
 
