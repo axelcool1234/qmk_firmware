@@ -64,11 +64,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
     [_BASE] = LAYOUT_split_3x6_3(
     //|-----------------------------------------------------|                    |-----------------------------------------------------|
-        KC_TAB,   KC_J,    KC_B,    KC_G,    KC_V,    KC_X,     /*-----------*/   KC_QUOTE,  KC_W,    KC_O,    KC_U,  KC_COMMA,KC_BSPC,
+        KC_TAB,   KC_J,    KC_B,    KC_G,    KC_D,    KC_K,     /*-----------*/     KC_Z,    KC_C,    KC_O,    KC_U,  KC_COMMA,KC_BSPC,
     //|--------+--------+--------+--------+--------+--------|    |AFTERBURNER|   |--------+--------+--------+--------+--------+--------|
          KC_Q,    KC_H,    KC_N,    KC_S,    KC_T,    KC_M,     /*-----------*/    QK_AREP, QK_SREP,  KC_A,    KC_E,   KC_I,   KC_MINS,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        OS_LSFT,  KC_Y,    KC_P,    KC_F,    KC_D,    KC_K,                         KC_Z,   KC_C,    KC_SLSH, KC_SCLN, KC_DOT, OS_EXTND,
+        OS_LSFT,  KC_Y,    KC_P,    KC_F,    KC_V,    KC_X,                       KC_QUOTE,  KC_W,   KC_SLSH, KC_SCLN, KC_DOT, OS_EXTND,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                             OS_SYM,   KC_R,   KC_L,      KC_ENTER,KC_SPACE, OS_NUM
     //                                    |--------------------------|  |--------------------------|
