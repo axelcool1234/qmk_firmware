@@ -5,18 +5,25 @@
 
 #include QMK_KEYBOARD_H
 
-// TODO:
+// TODO (future):
 // - Oxidization: https://nullp.tr/posts/oxidising-my-keyboard/#the-fruits-of-our-labour
+//
+// TODO (now):
+// - Change SYM layer
+// - Figure out changing OS_NUM to some other layer trick. One-shot is not good enough for multi-character numbers.
+// - Figure out changing OS_SYM to some other layer trick. One-shot is not good enough for multi-character symbols.
 
 ///--- Layers ---///
 /// The following defines the layers of the keyboard in order. Used in `keymaps`.
-/// BASE: Base layer. Uses Recurva-colstag2 alt keyboard layout. https://layouts.wiki/layouts/2023/recurva/
-/// SYM:  Symbol layer. Mirrored version of Pascal Getreuer's symbol layer.
-/// NUM:  Number layer. Numbers are on homerow, assigned to fingers based off how common it is.
+/// BASE:   Base layer. Uses Afterburner alt keyboard layout. https://layouts.wiki/layouts/2025/afterburner/
+/// SYM:    Symbol layer. Mirrored version of Pascal Getreuer's symbol layer.
+/// NUM:    Number layer. Numbers are on homerow, assigned to fingers based off how common it is.
+/// EXTEND: Extend layer. Used for modifiers and arrow key movement.
 enum layers {
     _BASE,
     _SYM,
     _NUM,
+    _EXTEND,
 };
 
 ///--- Keycodes ---///
@@ -41,32 +48,34 @@ enum keycodes {
  * OSL means Oneshot-Layer
  * TD means Tapdance
  * */
-#define OS_SYM OSL(_SYM)
-#define OS_NUM OSL(_NUM)
+#define OS_SYM   OSL(_SYM)
+#define OS_NUM   OSL(_NUM)
+#define OS_EXTND OSL(_EXTEND)
 
 ///--- Combos ---///
 /// Defines custom combos (pressing a combination of keys produces a unique output)
 /// Macro API: COMBO_DEF(combo name, output, ...keys to press simultaneously)
 #define COMBO_LIST \
-    COMBO_DEF(ENTER_COMBO, KC_ENTER,    KC_SPACE, QK_REP) \
-    COMBO_DEF(NUM_COMBO,   OS_NUM,      OS_LSFT,  OS_SYM)
+    COMBO_DEF(LCTRL_COMBO,  OS_LCTL,      KC_L,   KC_ENTER) \
+    COMBO_DEF(LGUI_COMBO,   OS_LGUI,      KC_R,   KC_SPACE) \
+    COMBO_DEF(LALT_COMBO,   OS_LALT,      OS_SYM, OS_NUM)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base Layers */
     [_BASE] = LAYOUT_split_3x6_3(
     //|-----------------------------------------------------|                    |-----------------------------------------------------|
-       XXXXXXXX,  KC_F,    KC_R,    KC_D,    KC_P,    KC_V,      /*-------*/        KC_Q,    KC_L,    KC_U,    KC_O,    KC_Y,  XXXXXXXX,
-    //|--------+--------+--------+--------+--------+--------|     |RECURVA|      |--------+--------+--------+--------+--------+--------|
-       XXXXXXXX,  KC_S,    KC_N,    KC_T,    KC_C,    KC_B,      /*-------*/        KC_M,    KC_H,    KC_E,    KC_A,    KC_I,   QK_MAKE,
+        KC_TAB,   KC_J,    KC_B,    KC_G,    KC_V,    KC_X,     /*-----------*/   KC_QUOTE,  KC_W,    KC_O,    KC_U,  KC_COMMA,KC_BSPC,
+    //|--------+--------+--------+--------+--------+--------|    |AFTERBURNER|   |--------+--------+--------+--------+--------+--------|
+         KC_Q,    KC_H,    KC_N,    KC_S,    KC_T,    KC_M,     /*-----------*/    QK_AREP, QK_SREP,  KC_A,    KC_E,   KC_I,   KC_MINS,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       XXXXXXXX,  KC_Z,    KC_X,    KC_K,    KC_G,    KC_W,                         KC_J,   KC_DOT,  KC_SCLN,KC_QUOTE,KC_COMMA, QK_BOOT,
+        KC_LSFT,  KC_Y,    KC_P,    KC_F,    KC_D,    KC_K,                         KC_Z,   KC_C,    KC_SLSH, KC_SCLN, KC_DOT, OS_EXTND,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_BSPC,KC_SPACE,OS_LSFT,     OS_SYM,  QK_REP, XXXXXXXX
+                                            OS_SYM,   KC_R,   KC_L,      KC_ENTER,KC_SPACE, OS_NUM
     //                                    |--------------------------|  |--------------------------|
-    //                                         |        |      |            |         |        |
-    //                                         |        |      .-- OS_NUM --.         |        |
-    //                                         |        .--------- KC_ENTER ----------.        |
-    //                                         .------------------ XXXXXXXX -------------------.
+    //                                         |        |      |              |       |       |
+    //                                         |        |      .--  OS_LCTL --.       |       |
+    //                                         |        .---------  OS_LGUI ----------.       |
+    //                                         .------------------  OS_LALT ------------------.
     ),
     [_SYM] = LAYOUT_split_3x6_3( // Mirrored version of Pascal Getreuer's symbol layer, with the opening and closing braces flipped for inward rolls.
                                  // Additionally, having it flipped means KC_MINS/KC_SLSH can be swapped with KC_PLUS/KC_ASTR, since those are more
@@ -97,8 +106,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        ________,KC_AT,   KC_LCBR, KC_RCBR, KC_DLR,  KC_TILD,                      M_UP_DIR,KC_BSLS, KC_SLSH, KC_ASTR, KC_CIRC, ________,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           ________,________,QK_LLCK,    ________,KC_UNDS, KC_SCLN
-                                        //`--------------------------'  `--------------------------' <
+                                           ________,________,________,    ________,KC_UNDS, KC_SCLN
+                                        //`--------------------------'  `--------------------------'
     ),
     [_NUM] = LAYOUT_split_3x6_3(
     //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -111,6 +120,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                            ________,________,________,   KC_COMM,  KC_BSPC, KC_DOT
                                         //`--------------------------'  `--------------------------'
     ),
+    [_EXTEND] = LAYOUT_split_3x6_3(
+    //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       ________,________,________,________,________,________,                     ________,________,________,________,________,________,
+    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       ________,OS_LGUI, OS_LALT, OS_LSFT, OS_LCTL, ________,                     ________, KC_LEFT, KC_DOWN,  KC_UP, KC_RIGHT,________,
+    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       ________,________,________,________,________,________,                     ________,________,________,________,________,________,
+    //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                            _______,________,________,   ________,________,________
+                                        //`--------------------------'  `--------------------------'
+    ),
+
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
