@@ -148,6 +148,61 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * "LAY" is key need to be held to be here
  *                                                                                                        */
 
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // Pure repeat if any modifiers besides shift
+    if ((mods & (MOD_MASK_CTRL | MOD_MASK_ALT | MOD_MASK_GUI))) {
+        return keycode;
+    }
+
+    // Optimal mappings:
+    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.bigrams | [ .[] | select(.key | test("[#]{2}")) ] | sort_by(.value)'
+    switch (keycode) {
+    case KC_A: return KC_O;
+    case KC_G: return KC_S;
+    case KC_H: return KC_Y;
+    case KC_U: return KC_E;
+    case KC_Y: return KC_H;
+    case KC_X: return KC_T;
+    default: return keycode;
+    }
+}
+
+uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // Pure repeat if any modifiers besides shift
+    if ((mods & (MOD_MASK_CTRL | MOD_MASK_ALT | MOD_MASK_GUI))) {
+        return keycode;
+    }
+
+    // Optimal mappings:
+    // PROTOC_INCLUDE='./proto/' pq --protofile proto/corpus.proto --msgtype corpus.Ngrams < corpora/reddit_small.ngrams.protobuf | jq '.trigrams | [ .[] | select(.key | startswith("#")) | { skipgram: (.key[0:1] + .key[2:3]), v: .value } ] | group_by(.skipgram) | [ .[] | reduce .[] as $item ( { s: "", v: 0 }; { s: $item.skipgram, v: (.v + $item.v) } ) ] | sort_by(.v)'
+    switch (keycode) {
+    case KC_A: return KC_O;
+    case KC_B: return KC_N;
+    case KC_D: return KC_T;
+    case KC_F: return KC_S;
+    case KC_G: return KC_S;
+    case KC_H: return KC_Y;
+    case KC_J: return KC_Y;
+    case KC_K: return KC_T;
+    case KC_L: return KC_R;
+    case KC_M: return KC_K;
+    case KC_O: return KC_A;
+    case KC_P: return KC_N;
+    case KC_Q: return KC_E;
+    case KC_R: return KC_L;
+    case KC_U: return KC_E;
+    case KC_V: return KC_T;
+    case KC_X: return KC_T;
+    case KC_Y: return KC_H;
+    case KC_COMM: return KC_I;
+    case KC_DOT: return KC_I;
+    case KC_MINS: return KC_I;
+    case KC_SLSH: return KC_A;
+    case KC_SCLN: return KC_E;
+    default: return keycode;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         /* Macros */
@@ -171,7 +226,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// Macro magic junk
+
+// Macro expansion junk
 enum combo_events {
 #define COMBO_DEF(name, output, ...) name,
     COMBO_LIST
