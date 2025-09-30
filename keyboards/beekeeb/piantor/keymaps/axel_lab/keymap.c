@@ -159,6 +159,15 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
     case KC_A: return KC_O;
     case KC_G: return KC_S;
+    case KC_I:  {
+        uint8_t effective_mods = get_mods() | get_oneshot_mods();
+
+        register_mods(effective_mods);
+        tap_code(KC_O);
+        tap_code(KC_U);
+        unregister_mods(effective_mods);
+        return KC_NO;
+    }
     case KC_H: return KC_Y;
     case KC_U: return KC_E;
     case KC_Y: return KC_H;
