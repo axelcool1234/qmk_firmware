@@ -10,7 +10,7 @@
 //
 // TODO (now):
 // - Change SYM layer
-// - Figure out changing OS_NUM to some other layer trick. One-shot is not good enough for multi-character numbers.
+// - Change OS_NUM to a layer key with CAPSWORD functionality. It can additionally be turned off by pressing the key again or by pressing OS_SYM.
 // - Figure out changing OS_SYM to some other layer trick. One-shot is not good enough for multi-character symbols.
 
 ///--- Layers ---///
