@@ -3,12 +3,17 @@
 
 #include QMK_KEYBOARD_H
 
-// Query state
-bool sym_word_enabled(void);
+/** @brief Gets whether currently active. */
+bool is_sym_word_on(void);
 
-// Control functions
-void enable_sym_word(void);
-void disable_sym_word(void);
+/** @brief Activates Sym Word. */
+void sym_word_on(void);
+
+/** @brief Deactivates Sym Word. */
+void sym_word_off(void);
+
+/** @brief Toggles Sym Word. */
+void sym_word_toggle(void);
 
 // Hook helpers
 void process_sym_word_activation(const keyrecord_t *record);

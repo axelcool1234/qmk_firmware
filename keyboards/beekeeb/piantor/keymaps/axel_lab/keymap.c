@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        ________,KC_LBRC, KC_RBRC,  KC_BSLS,  KC_9,  KC_PIPE,                      ________,  KC_8,  ________,________,________,________,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          SYMCANCEL, KC_GRV, KC_CIRC,    ________,________, KC_DLR
+                                           SYMCANCL, KC_GRV, KC_CIRC,    ________,________, KC_DLR
                                         //`--------------------------'  `--------------------------'
     ),
     [_EXTEND] = LAYOUT_split_3x6_3(
@@ -71,8 +71,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
 };
-
-
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     // Pure repeat if any modifiers besides shift
@@ -157,16 +155,19 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case SYMWORD:
-            process_sym_word_activation(record);
-            return false;   // don't let QMK handle SYMWORD again
+    // NOTE: this must be handled before everything else.
+    if (keycode == SYMWORD) {
+        process_sym_word_activation(record);
+        return false;
     }
 
-    // Let the helper decide if sym_word should swallow the key
+    // Let the helper decide if this keycode should be handled for us
     if (!process_sym_word(keycode, record)) {
         return false;
     }
+
+    // switch (keycode) {
+    // }
 
     return true;
 }

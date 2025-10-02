@@ -15,7 +15,7 @@ enum layers {
 
 enum keycodes {
     SYMWORD = SAFE_RANGE,
-    SYMCANCEL,
+    SYMCANCL,
 };
 
 ///--- Alias Macros ---////
