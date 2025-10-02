@@ -16,13 +16,11 @@
 ///--- Layers ---///
 /// The following defines the layers of the keyboard in order. Used in `keymaps`.
 /// BASE:   Base layer. Uses Afterburner alt keyboard layout. https://layouts.wiki/layouts/2025/afterburner/
-/// SYM:    Symbol layer. Mirrored version of Pascal Getreuer's symbol layer.
-/// NUM:    Number layer. Numbers are on homerow, assigned to fingers based off how common it is.
+/// SYM:    Symbol (and number) layer.
 /// EXTEND: Extend layer. Used for modifiers and arrow key movement.
 enum layers {
     _BASE,
     _SYM,
-    _NUM,
     _EXTEND,
 };
 
@@ -57,11 +55,19 @@ enum keycodes {
 /// Macro API: COMBO_DEF(combo name, output, ...keys to press simultaneously)
 #define COMBO_LIST \
     COMBO_DEF(LCTRL_COMBO,  OS_LCTL,      KC_L,   KC_ENTER) \
-    COMBO_DEF(LGUI_COMBO,   OS_LGUI,      KC_R,   KC_SPACE) \
-    COMBO_DEF(LALT_COMBO,   OS_LALT,      OS_SYM, OS_NUM)
+    COMBO_DEF(LGUI_COMBO,   OS_LGUI,      KC_R,   KC_SPACE)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    /* Base Layers */
+    /* ,-----------------------------------------.                ,-----------------------------------------.
+     * | TAB  |  J   |  B   |  G   |  D   |  K   |                |  Z   |  C   |  O   |  U   |  ,<  | BSPC |
+     * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+     * |  Q   |  H   |  N   |  S   |  T   |  M   |                |  MAG | SMAG |  A   |  E   |  I   |  -_  |
+     * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+     * | LSFT |  Y   |  P   |  F   |  V   |  X   |                |  '"  |  W   |  /?  |  ;:  |  .>  | EXTND|
+     * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+     *                             | SYM  |  R   |  L   |  |ENTER |SPACE |  _   |
+     *                             `--------------------'  `--------------------'
+     *                                                                                                        */
     [_BASE] = LAYOUT_split_3x6_3(
     //|-----------------------------------------------------|                    |-----------------------------------------------------|
         KC_TAB,   KC_J,    KC_B,    KC_G,    KC_D,    KC_K,     /*-----------*/     KC_Z,    KC_C,    KC_O,    KC_U,  KC_COMMA,KC_BSPC,
@@ -70,54 +76,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         OS_LSFT,  KC_Y,    KC_P,    KC_F,    KC_V,    KC_X,                       KC_QUOTE,  KC_W,   KC_SLSH, KC_SCLN, KC_DOT, OS_EXTND,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            OS_SYM,   KC_R,   KC_L,      KC_ENTER,KC_SPACE, OS_NUM
+                                            OS_SYM,   KC_R,   KC_L,      KC_ENTER,KC_SPACE, KC_UNDS
     //                                    |--------------------------|  |--------------------------|
     //                                         |        |      |              |       |       |
     //                                         |        |      .--  OS_LCTL --.       |       |
     //                                         |        .---------  OS_LGUI ----------.       |
     //                                         .------------------  OS_LALT ------------------.
     ),
-    [_SYM] = LAYOUT_split_3x6_3( // Mirrored version of Pascal Getreuer's symbol layer, with the opening and closing braces flipped for inward rolls.
-                                 // Additionally, having it flipped means KC_MINS/KC_SLSH can be swapped with KC_PLUS/KC_ASTR, since those are more
-                                 // common symbols and should be on the middle finger. The arrow operator -> will not be a SFB as it would be if it
-                                 // were not mirrored.
-                                 // Downsides to this change:
-                                 // - The arrow operator -> is now an outward roll rather than an inward roll.
-                                 // - The opening braces (, [, { are no longer on the middle finger, but the ring finger, despite these being
-                                 //   more common than the closing braces ), ], } which are no longer on the ring finger, but the middle finger.
-                                 // Upsides to this change:
-                                 // - Symbols ../, /, and \ are now all next to each other.
-                                 // - (), [], and {} are now inward rolls rather than outward rolls.
-                                 // - Symbols - and / are now on a more dominant finger (which is good since they're more common than + and *).
-                                 //
-                                 // The reason the upsides outweigh the downsides (justifying the mirroring):
-                                 // - Vim usage means autoclosing braces aren't helpful, so closing braces will be typed anyways, meaning the frequency of
-                                 //   opening and closing brace typed should be around the same. This also means the middle and ring finger will get equal
-                                 //   usage. A plus is now these symbols (), [], {} are inward rolls!
-                                 // - Easier mental compartmentalization of the symbol layer with the slashes and directory macro being grouped together.
-                                 // - The arrow operator -> being an outward roll is arguably better than (), [], and {} being outward rolls. Even if the
-                                 //   usage of each in programming were equal, this mirroring of Getreuer's symbol layer has gained two more additional
-                                 //   inward rolls. The arrow operator -> would have to be more common than (), [], and {} combined for this to be considered
-                                 //   a downside.
+    /* NUM + SYMBOL LAYER
+     * ,-----------------------------------------.                ,-----------------------------------------.
+     * |   @  |   7  |   5  |   1  |   3  |  #   |                |   +  |   2  |   0  |   4  |  ,<  | BSPC |
+     * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+     * |   %  |   {  |   }  |   (  |   )  |  &   |                |  MAG |   =  |   *  |   !  |   6  |  -_  |
+     * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+     * | LSFT |   [  |   ]  |   \  |   9  |  |   |                |  '"  |   8  |  /?  |  ;:  |  .>  | EXTND|
+     * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+     *                             |  SYM |  `~  |   ^  |  |ENTER |SPACE |   $  |
+     *                             `--------------------'  `--------------------'
+     *                                                                                                        */
+    [_SYM] = LAYOUT_split_3x6_3(
     //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       ________,KC_PERC, KC_LBRC, KC_RBRC, M_DCOLN, KC_AMPR,                      KC_DOT,  KC_DQT,  KC_LT,   KC_GT,   KC_QUOT, ________,
+       KC_AT,     KC_7,    KC_5,    KC_1,    KC_3,  KC_HASH,                      KC_PLUS,   KC_2,    KC_0,    KC_4,  ________,________,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       ________,KC_QUES, KC_LPRN, KC_RPRN, KC_COLN, KC_PIPE,                      KC_HASH, KC_EQL,  KC_MINS, KC_PLUS, KC_EXLM, ________,
+       KC_PERC, KC_LCBR, KC_RCBR,  KC_LPRN, KC_RPRN,KC_AMPR,                      ________, KC_EQL, KC_ASTR, KC_EXLM,   KC_6,  ________,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       ________,KC_AT,   KC_LCBR, KC_RCBR, KC_DLR,  KC_TILD,                      M_UP_DIR,KC_BSLS, KC_SLSH, KC_ASTR, KC_CIRC, ________,
+       ________,KC_LBRC, KC_RBRC,  KC_BSLS,  KC_9,  KC_PIPE,                      ________,  KC_8,  ________,________,________,________,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           ________,________,________,    ________,KC_UNDS, KC_SCLN
-                                        //`--------------------------'  `--------------------------'
-    ),
-    [_NUM] = LAYOUT_split_3x6_3(
-    //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       ________, KC_PERC, KC_PLUS, KC_MINS, KC_EQL,  KC_COMM,                       KC_DOT, KC_AMPR,  KC_LT,   KC_GT, KC_PIPE, ________,
-    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       ________,  KC_9,   KC_5,    KC_1,    KC_3,    KC_7,                          KC_6,    KC_2,    KC_0,    KC_4,    KC_8,  ________,
-    //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       ________,OS_LGUI, OS_LALT, OS_LSFT, OS_LCTL,  KC_EQL,                       KC_MINS, KC_PLUS, KC_SLSH, KC_ASTR, KC_CIRC,________,
-    //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           ________,________,________,   KC_COMM,  KC_BSPC, KC_DOT
+                                           ________, KC_GRV, KC_CIRC,    ________,________, KC_DLR
                                         //`--------------------------'  `--------------------------'
     ),
     [_EXTEND] = LAYOUT_split_3x6_3(
@@ -128,25 +113,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        ________,________,________,________,________,________,                     ________,________,________,________,________,QK_BOOT,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            _______,________,________,   ________,________,________
+                                           ________,________,________,   ________,________,________
                                         //`--------------------------'  `--------------------------'
     ),
 
 };
 
-/* TEMP SYM + NUM layer
- * ,-----------------------------------------.                ,-----------------------------------------.
- * |      |      |      |      |      |      |                |  '"  |      |      |      |  ,<  | BSPC |
- * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                |      |      |      |      |      |  -_  |
- * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                |      |      |  /?  |  ;:  |  .>  |      |
- * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
- *                             |  LAY |      |      |  |  ENT | SPC  |  _   |
- *                             `--------------------'  `--------------------'
- * NEED: !@#$%^&*()+=[]{}|\~`
- * "LAY" is key need to be held to be here
- *                                                                                                        */
+
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     // Pure repeat if any modifiers besides shift
@@ -172,6 +145,24 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     case KC_U: return KC_E;
     case KC_Y: return KC_H;
     case KC_X: return KC_T;
+
+    // Symbol Bigrams
+    case KC_LEFT_PAREN:        return KC_RIGHT_PAREN;       // ()
+    case KC_LEFT_BRACKET:      return KC_RIGHT_BRACKET;     // []
+    case KC_LEFT_CURLY_BRACE:  return KC_RIGHT_CURLY_BRACE; // {}
+    case KC_RIGHT_PAREN:       return KC_SCLN;              // );
+    case KC_RIGHT_BRACKET:     return KC_SCLN;              // ];
+    case KC_RIGHT_CURLY_BRACE: return KC_SCLN;              // };
+    case KC_QUESTION:          return KC_SCLN;              // ?;
+    case KC_QUOTE:             return KC_COMMA;             // ', and ",
+    case KC_MINS:              return KC_EQUAL;             // -=
+    case KC_PLUS:              return KC_EQUAL;             // +=
+    case KC_ASTERISK:          return KC_EQUAL;             // *=
+    case KC_GT:                return KC_EQUAL;             // >=
+    case KC_LT:                return KC_EQUAL;             // <=
+    case KC_HASH:              return KC_LEFT_BRACKET;      // #[
+    case KC_DOLLAR:            return KC_RIGHT_CURLY_BRACE; // ${
+
     default: return keycode;
     }
 }
