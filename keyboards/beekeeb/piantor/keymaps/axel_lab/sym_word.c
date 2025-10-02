@@ -60,7 +60,7 @@ void process_sym_word_activation(const keyrecord_t *record) {
 
 
 bool _sym_word_no_consume(uint16_t keycode) {
-    // The following keys does not consume one-shot mode.
+    // The following keys do not consume one-shot mode.
     // So if SYM layer is in one-shot, these keys can be pressed multiple times without deactivating it.
     switch (keycode) {
         case KC_0:
