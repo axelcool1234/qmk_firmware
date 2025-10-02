@@ -5,7 +5,7 @@
 
 #include QMK_KEYBOARD_H
 #include "defines.h"
-#include "num_word.h"
+#include "sym_word.h"
 
 // TODO (future):
 // - Oxidization: https://nullp.tr/posts/oxidising-my-keyboard/#the-fruits-of-our-labour
@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        ________,KC_LBRC, KC_RBRC,  KC_BSLS,  KC_9,  KC_PIPE,                      ________,  KC_8,  ________,________,________,________,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           ________, KC_GRV, KC_CIRC,    ________,________, KC_DLR
+                                          SYMCANCEL, KC_GRV, KC_CIRC,    ________,________, KC_DLR
                                         //`--------------------------'  `--------------------------'
     ),
     [_EXTEND] = LAYOUT_split_3x6_3(
@@ -159,9 +159,15 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SYMWORD:
-            process_num_word_activation(record);
-            return false;
+            process_sym_word_activation(record);
+            return false;   // don't let QMK handle SYMWORD again
     }
+
+    // Let the helper decide if sym_word should swallow the key
+    if (!process_sym_word(keycode, record)) {
+        return false;
+    }
+
     return true;
 }
 
