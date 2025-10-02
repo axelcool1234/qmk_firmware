@@ -4,58 +4,11 @@
 // Docs: https://docs.qmk.fm/
 
 #include QMK_KEYBOARD_H
+#include "defines.h"
+#include "num_word.h"
 
 // TODO (future):
 // - Oxidization: https://nullp.tr/posts/oxidising-my-keyboard/#the-fruits-of-our-labour
-//
-// TODO (now):
-// - Change SYM layer
-// - Change OS_NUM to a layer key with CAPSWORD functionality. It can additionally be turned off by pressing the key again or by pressing OS_SYM.
-// - Figure out changing OS_SYM to some other layer trick. One-shot is not good enough for multi-character symbols.
-
-///--- Layers ---///
-/// The following defines the layers of the keyboard in order. Used in `keymaps`.
-/// BASE:   Base layer. Uses Afterburner alt keyboard layout. https://layouts.wiki/layouts/2025/afterburner/
-/// SYM:    Symbol (and number) layer.
-/// EXTEND: Extend layer. Used for modifiers and arrow key movement.
-enum layers {
-    _BASE,
-    _SYM,
-    _EXTEND,
-};
-
-///--- Keycodes ---///
-/// Defines custom keycodes
-/// M_UP_DIR: types ../
-/// M_DCOLN:  types ::
-enum keycodes {
-    // Custom oneshot mod implementation with no timers, courtesy of Callum's mods.
-    /* Macros */
-    M_UP_DIR = SAFE_RANGE,
-    M_DCOLN,
-};
-
-///--- Alias Macros ---////
-/// i.e., alternative names for other defined macros.
-#define XXXXXXXX XXXXXXX
-#define ________ _______
-
-/* Switch layer
- * LT means Layer-Tap
- * LA means Layer-Activate (the same as an MO() call, deactivates upon keyup)
- * OSL means Oneshot-Layer
- * TD means Tapdance
- * */
-#define OS_SYM   OSL(_SYM)
-#define OS_NUM   OSL(_NUM)
-#define OS_EXTND OSL(_EXTEND)
-
-///--- Combos ---///
-/// Defines custom combos (pressing a combination of keys produces a unique output)
-/// Macro API: COMBO_DEF(combo name, output, ...keys to press simultaneously)
-#define COMBO_LIST \
-    COMBO_DEF(LCTRL_COMBO,  OS_LCTL,      KC_L,   KC_ENTER) \
-    COMBO_DEF(LGUI_COMBO,   OS_LGUI,      KC_R,   KC_SPACE)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* ,-----------------------------------------.                ,-----------------------------------------.
@@ -76,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         OS_LSFT,  KC_Y,    KC_P,    KC_F,    KC_V,    KC_X,                       KC_QUOTE,  KC_W,   KC_SLSH, KC_SCLN, KC_DOT, OS_EXTND,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            OS_SYM,   KC_R,   KC_L,      KC_ENTER,KC_SPACE, KC_UNDS
+                                            SYMWORD,  KC_R,   KC_L,      KC_ENTER,KC_SPACE, KC_UNDS
     //                                    |--------------------------|  |--------------------------|
     //                                         |        |      |              |       |       |
     //                                         |        |      .--  OS_LCTL --.       |       |
@@ -205,22 +158,8 @@ uint16_t get_skip_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        /* Macros */
-        case M_UP_DIR:
-            if (record->event.pressed) {
-                SEND_STRING("../");
-            }
-            else {
-
-            }
-            return false;
-        case M_DCOLN:
-            if (record->event.pressed) {
-                SEND_STRING("::");
-            }
-            else {
-
-            }
+        case SYMWORD:
+            process_num_word_activation(record);
             return false;
     }
     return true;
