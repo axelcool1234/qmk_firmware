@@ -85,7 +85,7 @@ bool _sym_word_no_consume(uint16_t keycode) {
 bool process_sym_word(uint16_t keycode, const keyrecord_t *record) {
     // If sym word isn't in one-shot mode, let key be processed normally
     if (!sym_word_one_shot) {
-        // If sym word isn't in one shot mode and the sym layer is on and it isn't a consuming key,
+        // If sym word isn't in one shot mode and the sym layer is on and it's a consuming key,
         // flag that if this were to become one shot mode, the one shot has been consumed.
         if (layer_state_is(_SYM) && !_sym_word_no_consume(keycode)) {
              sym_word_one_shot_consumed = true;
