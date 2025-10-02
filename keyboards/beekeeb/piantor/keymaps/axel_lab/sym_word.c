@@ -93,7 +93,8 @@ bool process_sym_word(uint16_t keycode, const keyrecord_t *record) {
         return true;
     }
 
-    // If key that's pressed is consuming, tap the key and then turn off the SYM layer.
+    // If key that's pressed is consuming, tap the key and then turn off the SYM layer. 
+    // This is because we are in one-shot mode, which is now consumed (if we aren't't in one shot mode we would've returned earlier in this function).
     if(!_sym_word_no_consume(keycode)) {
         if (record->event.pressed) {
             if (keycode != SYMCANCL) {
